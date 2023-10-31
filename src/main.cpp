@@ -1,19 +1,18 @@
 #include <Arduino.h>
 #include<Cam.h>
+#include<ac.h>
 
+AC ac;
 
 void setup() {
-  Serial4.begin(9600);
   Serial.begin(9600);
+  while(!Serial);
+  Serial.print("sawa");
+  ac.setup();
+  Serial.print("aho");
 }
 
 void loop() {
-  if(0 < Serial4.available()){
-    int A = Serial4.read();
-    Serial.println(A);
-  }
-  else{
-    Serial.println("sawA");
-  }
-  delay(100);
+  Serial.println(ac.getAC_val());
+  delay(50);
 }
