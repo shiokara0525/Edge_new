@@ -12,7 +12,6 @@ class Cam{
         float ang;
         float Size;
         void print();
-        float P = 0;
         int on = 0;
         int color = 0;
         MA csize;

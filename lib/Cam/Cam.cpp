@@ -2,7 +2,7 @@
 
 
 Cam::Cam(){
-    Serial4.begin(9600);
+    Serial3.begin(9600);
     csize.setLenth(20);
     csize.reset();
 }
@@ -16,8 +16,6 @@ void Cam::print(){
     else{
         Serial.print("  ang: ");
         Serial.print(ang);
-        Serial.print(" P : ");
-        Serial.print(P);
         Serial.print("  size: ");
         Serial.println(Size);
     }
