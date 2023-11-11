@@ -2,8 +2,8 @@
 #include<Adafruit_NeoPixel.h>
 #include<Cam.h>
 
-const int C = 32;
-const int K = 31;
+const int C = 35;
+const int K = 33;
 const int LED = 13;
 #define DELAYVAL 500
 #define PIN        30 
@@ -12,8 +12,8 @@ const int LED = 13;
 Adafruit_NeoPixel pixels(DELAYVAL, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
-  pinMode(C,OUTPUT);
   pinMode(K,OUTPUT);
+  pinMode(C,OUTPUT);
   pinMode(LED,OUTPUT);
   pixels.begin();
   pixels.clear();
@@ -26,7 +26,7 @@ void loop() {
   delay(5000);
   digitalWrite(K,HIGH);
   digitalWrite(LED,HIGH);
-  delay(500);
+  delay(1000);
   digitalWrite(K,LOW);
   digitalWrite(LED,LOW);
 }
