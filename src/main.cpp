@@ -41,7 +41,7 @@ void loop() {
     PWM[1] = val; 
   }
 
-  for(int i = 1; i < 5; i++){
+  for(int i = 0; i < 5; i++){
     analogWrite(PWM_p[i][0],PWM[0]);
     analogWrite(PWM_p[i][1],PWM[1]);
   }
