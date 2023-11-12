@@ -1,49 +1,61 @@
 #include <Arduino.h>
-#include<Adafruit_NeoPixel.h>
-#include<Cam.h>
+#include<line.h>
 
-const int C = 35;
-const int K = 33;
-const int LED = 13;
-#define DELAYVAL 500
-#define PIN        30 
-#define NUMPIXELS 16
-
-Adafruit_NeoPixel pixels(DELAYVAL, PIN, NEO_GRB + NEO_KHZ800);
-
+LINE line;
 int x = 0;
 int y = 0;
 int num = 0;
 
 void setup() {
   Serial.begin(9600);
-  Serial6.begin(9600);
-  pixels.begin();
+  Serial6.begin(57600);
 }
 
 void loop() {
+  line.getLINE_Vec(x,y,num);
+  line.print();
+  Serial.println();
 }
 
 
 void serialEvent6(){
+  delayMicroseconds(100);
   uint8_t read[7];
-  if(7 <= Serial6.available()){
-    for(int i = 0; i < 5; i++){
-      read[i] = Serial6.read();
+  word contain[4];
+  int n = 0;
+  if(Serial6.available() < 7){
+    return;
+  }
+  while(0 < Serial6.available()){
+    if(n < 7){
+      read[n] = Serial6.read();
     }
-    while(Serial6.available()){
+    else{
       Serial6.read();
+    }
+    n++;
+  }
+
+  if(read[0] == 38 && read[6] == 37){
+    contain[0] = (uint16_t(read[1]) << 8);
+    contain[1] = (uint16_t(read[2]));
+    x = int16_t(contain[0] | contain[1]);
+    contain[2] = (uint16_t(read[3]) << 8);
+    contain[3] = (uint16_t(read[4]));
+    y = int16_t(contain[2] | contain[3]);
+    num = read[5];
+    Serial.print("x : ");
+    Serial.print(x);
+    Serial.print(" y : ");
+    Serial.print(y);
+  }
+  else{
+    Serial.print(" Error!! ");
+    for(int i = 0; i < 7; i++){
+      Serial.print(read[i]);
+      Serial.print(" ");
     }
   }
 
-  if(read[0] == 38 && read[4] == 37){
-    x = read[1];
-    y = read[2];
-    num = read[3];
-  }
-  Serial.print(x);
-  Serial.print(" ");
-  Serial.print(y);
-  Serial.print(" ");
-  Serial.println(num);
+  Serial.println();
 }
