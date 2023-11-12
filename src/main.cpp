@@ -52,14 +52,18 @@ void serialEvent8(){
       
       X = x;
       Y = y;
+      Serial.print(X);
+      Serial.print(" ");
+      Serial.print(Y);
+      Serial.print(" ");
+      Serial.println(degrees(atan2(Y,X)));
     }
     else{
-      // printf("ERR_REV");
+      Serial.println("ERR_REV");
     }
   }
-  Serial.print(X);
-  Serial.print(" ");
-  Serial.print(Y);
-  Serial.print(" ");
-  Serial.println(degrees(atan2(Y,X)));
+
+
+  // uint8_t a = Serial8.read();
+  // Serial.println(a);
 }
