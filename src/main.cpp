@@ -13,7 +13,6 @@ int PWM_p[5][2] = {
 AC ac;
 int LED = 13;
 void motor(float ang);
-void moveM(int val);
 float X = 0;
 float Y = 0;
 
