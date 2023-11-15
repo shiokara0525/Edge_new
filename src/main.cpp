@@ -19,7 +19,6 @@ void loop() {
 
 
 void serialEvent6(){
-  delayMicroseconds(100);
   uint8_t read[7];
   word contain[4];
   int n = 0;
