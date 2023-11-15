@@ -6,13 +6,13 @@
 
 BALL ball;
 int A = 1;
-int val = 175;
+int val = 200;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
 AC ac;
 int LED = 13;
-void motor(float ang,float ac_v);
+void motor(float ang);
 float X = 0;
 float Y = 0;
 
