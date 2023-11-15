@@ -1,8 +1,7 @@
 #include <Arduino.h>
-#include<Adafruit_NeoPixel.h>
-#include<Cam.h>
 #include<ac.h>
 #include<ball.h>
+#include<line.h>
 
 BALL ball;
 int A = 1;
@@ -12,19 +11,30 @@ int PWM_p[5][2] = {
 };
 AC ac;
 int LED = 13;
-void motor(float ang);
+void motor(float ang,float ac_v);
 float X = 0;
 float Y = 0;
 
+LINE line;
+int x = 0;
+int y = 0;
+int num = 0;
+
+int line_A = 0;
+int line_B = 999;
+int Line_flag = 0;
+
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(9600);
+  Serial6.begin(57600);
   Serial8.begin(57600);
-  // ac.setup();
   for(int i = 0; i < 5; i++){
     pinMode(PWM_p[i][0],OUTPUT);
     pinMode(PWM_p[i][1],OUTPUT);
   }
+  ac.setup();
+  Serial.println("sawa");
   pinMode(LED,OUTPUT);
   digitalWrite(LED,HIGH);
   delay(400);
@@ -34,17 +44,30 @@ void setup() {
 }
 
 void loop() {
+  angle go_ang(0,true);
   ball.getBallposition();
-  float AC_val = ac.getAC_val();
-  // ball.print();
-  // Serial.println();
+  line.getLINE_Vec(x,y,num);
 
-  motor(ball.ang);
+  float AC_val = ac.getAC_val();
+
+  if(line.LINE_on == 1){
+    angle line_ang(line.ang,true);
+    if(line_A != line_B){
+      Line_flag = line.switchLineflag(line_ang);
+      line_B = line_A;
+      go_ang = line.decideGoang(line_ang,Line_flag);
+    }
+    go_ang = line.decideGoang(line_ang,Line_flag);
+  }
+
+  // motor(go_ang.degree,AC_val);
+  line.print();
+  Serial.println();
 }
 
 
 
-void motor(float ang){
+void motor(float ang,float ac_v){
   double mSin[4] = {1,1,-1,-1};  //行列式のsinの値
   double mCos[4] = {1,-1,-1,1};  //行列式のcosの値
   float X = cos(radians(ang));
@@ -52,6 +75,7 @@ void motor(float ang){
   float Mval[4];
   double g = 0;                //モーターの最終的に出る最終的な値の比の基準になる値
   float val_ = val;
+  val_ -= ac_v;
 
   for(int i = 0; i < 4; i++){
     Mval[i] = -mSin[i] * X + mCos[i] * Y; //モーターの回転速度を計算(行列式で管理)
@@ -61,7 +85,7 @@ void motor(float ang){
   }
 
   for(int i = 0; i < 4; i++){
-    Mval[i] = Mval[i] / g * val_;  //モーターの値を計算(進みたいベクトルの値と姿勢制御の値を合わせる)
+    Mval[i] = Mval[i] / g * val_ + ac_v;  //モーターの値を計算(進みたいベクトルの値と姿勢制御の値を合わせる)
     if(Mval[i] < 0){
       analogWrite(PWM_p[i][0],abs(Mval[i]));
       analogWrite(PWM_p[i][1],0);
@@ -73,8 +97,54 @@ void motor(float ang){
     Serial.print(Mval[i]);
     Serial.print(" ");
   }
+}
+
+
+
+void serialEvent6(){
+  uint8_t read[7];
+  word contain[4];
+  int n = 0;
+  if(Serial6.available() < 7){
+    return;
+  }
+  while(0 < Serial6.available()){
+    if(n < 7){
+      read[n] = Serial6.read();
+    }
+    else{
+      Serial6.read();
+    }
+    n++;
+  }
+
+  if(read[0] == 38 && read[6] == 37){
+    contain[0] = (uint16_t(read[1]) << 8);
+    contain[1] = (uint16_t(read[2]));
+    x = int16_t(contain[0] | contain[1]);
+    contain[2] = (uint16_t(read[3]) << 8);
+    contain[3] = (uint16_t(read[4]));
+    y = int16_t(contain[2] | contain[3]);
+    num = read[5];
+    x *= -1;
+    y *= -1;
+    Serial.print("x : ");
+    Serial.print(x);
+    Serial.print(" y : ");
+    Serial.print(y);
+  }
+  else{
+    Serial.print(" Error!! ");
+    for(int i = 0; i < 7; i++){
+      Serial.print(read[i]);
+      Serial.print(" ");
+    }
+  }
+
   Serial.println();
 }
+
+
 
 
 void serialEvent8(){
