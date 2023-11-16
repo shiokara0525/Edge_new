@@ -61,8 +61,7 @@ void loop() {
   }
 
   // motor(go_ang.degree,AC_val);
-  line.print();
-  Serial.println();
+  // line.print();
 }
 
 
@@ -104,10 +103,14 @@ void motor(float ang,float ac_v){
 void serialEvent6(){
   uint8_t read[7];
   word contain[4];
-  int n = 0;
+  int n = 1;
   if(Serial6.available() < 7){
     return;
   }
+  read[0] = Serial6.read();
+  if(read[0] != 38){
+    return;
+  } 
   while(0 < Serial6.available()){
     if(n < 7){
       read[n] = Serial6.read();
@@ -128,19 +131,21 @@ void serialEvent6(){
     num = read[5];
     x *= -1;
     y *= -1;
-    Serial.print("x : ");
+    Serial.print(" x  : ");
     Serial.print(x);
     Serial.print(" y : ");
     Serial.print(y);
+    Serial.print(" ang : ");
+    Serial.print(degrees(atan2(y,x)));
+    Serial.print(" | ");
   }
   else{
     Serial.print(" Error!! ");
-    for(int i = 0; i < 7; i++){
-      Serial.print(read[i]);
-      Serial.print(" ");
-    }
   }
-
+  for(int i = 0; i < 7; i++){
+    Serial.print(read[i]);
+    Serial.print(" ");
+  }
   Serial.println();
 }
 

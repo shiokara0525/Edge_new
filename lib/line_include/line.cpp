@@ -48,7 +48,6 @@ float LINE::decideGoang(angle linedir,int line_flag){
       goang = line_switch(i,linedir.degree,line_flag);
     }
   }
-  Serial.print(goang);
   return goang;
 }
 
