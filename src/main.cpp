@@ -5,6 +5,10 @@ LINE line;
 int x = 0;
 int y = 0;
 int num = 0;
+int A = 0;
+int B = 999;
+float go_ang;
+int line_flag = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -13,6 +17,19 @@ void setup() {
 
 void loop() {
   line.getLINE_Vec(x,y,num);
+  if(line.LINE_on){
+    A = 1;
+    angle line_dir(line.ang,true);
+    if(A != B){
+      B = A;
+      line_flag = line.switchLineflag(line_dir);
+    }
+    go_ang = line.decideGoang(line_dir,line_flag);
+  }
+  else{
+    A = 0;
+    B = 0;
+  }
   line.print();
   Serial.println();
 }
@@ -47,6 +64,8 @@ void serialEvent6(){
     Serial.print(x);
     Serial.print(" y : ");
     Serial.print(y);
+    x *= -1;
+    y *= -1;
   }
   else{
     Serial.print(" Error!! ");

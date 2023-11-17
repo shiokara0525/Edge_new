@@ -43,12 +43,15 @@ double line_switch(int,double,int);
 float LINE::decideGoang(angle linedir,int line_flag){
   float goang = 0;
   linedir.to_range(-15,false);
+  Serial.print(linedir.degree);
+  Serial.print(" ");
   for(int i = 0; i < 12; i++){  //角度を12つに区分して、それぞれどの区分にいるか判定する
     if(-15 +(i * 30) < linedir.degree && linedir.degree < 15 +(i * 30)){  //時計回りにどの区分にいるか判定してるよ
       goang = line_switch(i,linedir.degree,line_flag);
     }
   }
-  
+  Serial.print(goang);
+  Serial.print(" ");
   return goang;
 }
 
