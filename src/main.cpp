@@ -5,15 +5,13 @@
 
 BALL ball;
 int A = 1;
-int val = 200;
+int val = 100;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
 AC ac;
 int LED = 13;
 void motor(float ang,float ac_v);
-float X = 0;
-float Y = 0;
 
 LINE line;
 int x = 0;
@@ -23,6 +21,13 @@ int num = 0;
 int line_A = 0;
 int line_B = 999;
 int Line_flag = 0;
+
+int ang_180 = 240;
+int ang_90 = 165;
+int ang_30 = 80;
+
+int toogle_f;
+int toogle_P = 27;
 
 
 void setup() {
@@ -35,12 +40,11 @@ void setup() {
   }
   ac.setup();
   Serial.println("sawa");
-  pinMode(LED,OUTPUT);
-  digitalWrite(LED,HIGH);
-  delay(400);
-  digitalWrite(LED,LOW);
-  delay(400);
-  digitalWrite(LED,HIGH);
+
+  toogle_f = digitalRead(toogle_P);
+  while(digitalRead(toogle_P) == toogle_f);
+  ac.setup_2();
+  toogle_f = digitalRead(toogle_P);
 }
 
 void loop() {
@@ -58,10 +62,34 @@ void loop() {
       go_ang = line.decideGoang(line_ang,Line_flag);
     }
     go_ang = line.decideGoang(line_ang,Line_flag);
+    Serial.print("sawa");
+  }
+  else{
+    line_B = 0;
+    if(abs(ball.ang) < 30){
+      go_ang = ang_30 / 30 * ball.ang;
+    }
+    else if(abs(ball.ang) < 90){
+      go_ang = ((ang_90 - ang_30) / 60 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
+    }
+    else{
+      go_ang = ((ang_180 - ang_90) / 90 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
+    }
   }
 
-  // motor(go_ang.degree,AC_val);
+  // Serial.print(go_ang.degree);
+  // Serial.println();
+
+  motor(go_ang.degree,AC_val);
   // line.print();
+  if(toogle_f != digitalRead(toogle_P)){
+    for(int i = 0; i < 4; i++){
+      analogWrite(PWM_p[i][0],0);
+      analogWrite(PWM_p[i][1],0);
+    }
+    while(toogle_f == digitalRead(toogle_P));
+    ac.setup_2();
+  }
 }
 
 
@@ -117,10 +145,8 @@ void serialEvent6(){
       read[n] = Serial6.read();
     }
     else{
-    else{
       Serial6.read();
     }
-    n++;
     n++;
   }
 
