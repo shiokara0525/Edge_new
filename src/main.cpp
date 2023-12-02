@@ -16,6 +16,7 @@ void setup() {
 }
 
 void loop() {
+  go_ang = 0;
   line.getLINE_Vec(x,y,num);
   if(line.LINE_on){
     A = 1;
@@ -30,12 +31,14 @@ void loop() {
     A = 0;
     B = 0;
   }
-  line.print();
+  // line.print();
+  Serial.print(go_ang);
   Serial.println();
 }
 
 
 void serialEvent6(){
+  // Serial.print("sawa");
   uint8_t read[7];
   word contain[4];
   int n = 0;
@@ -60,19 +63,19 @@ void serialEvent6(){
     contain[3] = (uint16_t(read[4]));
     y = int16_t(contain[2] | contain[3]);
     num = read[5];
-    Serial.print("x : ");
-    Serial.print(x);
-    Serial.print(" y : ");
-    Serial.print(y);
+    // Serial.print("x : ");
+    // Serial.print(x);
+    // Serial.print(" y : ");
+    // Serial.print(y);
     x *= -1;
     y *= -1;
   }
   else{
-    Serial.print(" Error!! ");
-    for(int i = 0; i < 7; i++){
-      Serial.print(read[i]);
-      Serial.print(" ");
-    }
+    // Serial.print(" Error!! ");
+    // for(int i = 0; i < 7; i++){
+    //   Serial.print(read[i]);
+    //   Serial.print(" ");
+    // }
   }
 
   Serial.println();
