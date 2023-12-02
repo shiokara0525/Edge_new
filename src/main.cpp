@@ -101,6 +101,7 @@ void motor(float ang,float ac_v){
 
 
 void serialEvent6(){
+  // Serial.print("sawa");
   uint8_t read[7];
   word contain[4];
   int n = 1;
@@ -116,8 +117,10 @@ void serialEvent6(){
       read[n] = Serial6.read();
     }
     else{
+    else{
       Serial6.read();
     }
+    n++;
     n++;
   }
 

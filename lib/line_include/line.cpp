@@ -76,7 +76,6 @@ double line_switch(int i,double ang,int line_flag){  //ラインを踏みこし�
 
   double goang = (i * 30.0)- 180.0;
 
-  
 
   return goang;
 }
