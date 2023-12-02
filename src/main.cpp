@@ -5,7 +5,7 @@
 
 BALL ball;
 int A = 1;
-int val = 100;
+int val = 170;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
@@ -22,9 +22,9 @@ int line_A = 0;
 int line_B = 999;
 int Line_flag = 0;
 
-int ang_180 = 240;
-int ang_90 = 165;
-int ang_30 = 80;
+const int ang_180 = 210;
+const int ang_90 = 165;
+const int ang_30 = 80;
 
 int toogle_f;
 int toogle_P = 27;
@@ -66,22 +66,26 @@ void loop() {
   }
   else{
     line_B = 0;
-    if(abs(ball.ang) < 30){
-      go_ang = ang_30 / 30 * ball.ang;
+    if(abs(ball.ang < 10)){
+      go_ang = ball.ang;
+    }
+    else if(abs(ball.ang) < 30){
+      go_ang = ang_30 / 30.0 * ball.ang;
     }
     else if(abs(ball.ang) < 90){
-      go_ang = ((ang_90 - ang_30) / 60 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
+      go_ang = ((ang_90 - ang_30) / 60.0 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
     }
     else{
-      go_ang = ((ang_180 - ang_90) / 90 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
+      go_ang = ((ang_180 - ang_90) / 90.0 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
     }
   }
-
-  // Serial.print(go_ang.degree);
-  // Serial.println();
+  Serial.print(" ");
+  Serial.print(ball.ang);
+  Serial.print(" ");
+  Serial.print(go_ang.degree);
+  Serial.println();
 
   motor(go_ang.degree,AC_val);
-  // line.print();
   if(toogle_f != digitalRead(toogle_P)){
     for(int i = 0; i < 4; i++){
       analogWrite(PWM_p[i][0],0);
@@ -121,8 +125,6 @@ void motor(float ang,float ac_v){
       analogWrite(PWM_p[i][0],0);
       analogWrite(PWM_p[i][1],abs(Mval[i]));
     }
-    Serial.print(Mval[i]);
-    Serial.print(" ");
   }
 }
 
@@ -160,22 +162,22 @@ void serialEvent6(){
     num = read[5];
     x *= -1;
     y *= -1;
-    Serial.print(" x  : ");
-    Serial.print(x);
-    Serial.print(" y : ");
-    Serial.print(y);
-    Serial.print(" ang : ");
-    Serial.print(degrees(atan2(y,x)));
-    Serial.print(" | ");
+    // Serial.print(" x  : ");
+    // Serial.print(x);
+    // Serial.print(" y : ");
+    // Serial.print(y);
+    // Serial.print(" ang : ");
+    // Serial.print(degrees(atan2(y,x)));
+    // Serial.print(" | ");
   }
   else{
-    Serial.print(" Error!! ");
+    // Serial.print(" Error!! ");
   }
   for(int i = 0; i < 7; i++){
-    Serial.print(read[i]);
-    Serial.print(" ");
+    // Serial.print(read[i]);
+    // Serial.print(" ");
   }
-  Serial.println();
+  // Serial.println();
 }
 
 
