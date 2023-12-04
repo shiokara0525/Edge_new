@@ -5,7 +5,7 @@
 
 BALL ball;
 int A = 1;
-int val = 170;
+int val = 160;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
@@ -25,6 +25,7 @@ int Line_flag = 0;
 const int ang_180 = 210;
 const int ang_90 = 165;
 const int ang_30 = 80;
+const int ang_10 = 10;
 
 int toogle_f;
 int toogle_P = 27;
@@ -39,7 +40,6 @@ void setup() {
     pinMode(PWM_p[i][1],OUTPUT);
   }
   ac.setup();
-  Serial.println("sawa");
 
   toogle_f = digitalRead(toogle_P);
   while(digitalRead(toogle_P) == toogle_f);
@@ -54,7 +54,7 @@ void loop() {
 
   float AC_val = ac.getAC_val();
 
-  if(line.LINE_on == 1){
+  if(0){
     angle line_ang(line.ang,true);
     if(line_A != line_B){
       Line_flag = line.switchLineflag(line_ang);
@@ -66,11 +66,11 @@ void loop() {
   }
   else{
     line_B = 0;
-    if(abs(ball.ang < 10)){
-      go_ang = ball.ang;
+    if(abs(ball.ang) < 10){
+      go_ang = ang_10 / 10 * ball.ang;
     }
     else if(abs(ball.ang) < 30){
-      go_ang = ang_30 / 30.0 * ball.ang;
+      go_ang = ((ang_30 - ang_10) / 20.0) * (abs(ball.ang - 10) + ang_10) * ball.ang / abs(ball.ang);
     }
     else if(abs(ball.ang) < 90){
       go_ang = ((ang_90 - ang_30) / 60.0 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
