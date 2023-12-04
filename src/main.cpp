@@ -67,10 +67,10 @@ void loop() {
   else{
     line_B = 0;
     if(abs(ball.ang) < 10){
-      go_ang = ang_10 / 10 * ball.ang;
+      go_ang = ang_10 / 10.0 * ball.ang;
     }
     else if(abs(ball.ang) < 30){
-      go_ang = ((ang_30 - ang_10) / 20.0) * (abs(ball.ang - 10) + ang_10) * ball.ang / abs(ball.ang);
+      go_ang = ((ang_30 - ang_10) / 20.0 * (abs(ball.ang - 10) + ang_10)) * ball.ang / abs(ball.ang);
     }
     else if(abs(ball.ang) < 90){
       go_ang = ((ang_90 - ang_30) / 60.0 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
