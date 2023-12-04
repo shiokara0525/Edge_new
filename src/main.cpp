@@ -5,7 +5,7 @@
 
 BALL ball;
 int A = 1;
-int val = 160;
+int val = 120;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
@@ -23,8 +23,8 @@ int line_B = 999;
 int Line_flag = 0;
 
 const int ang_180 = 210;
-const int ang_90 = 165;
-const int ang_30 = 80;
+const int ang_90 = 150;
+const int ang_30 = 60;
 const int ang_10 = 10;
 
 int toogle_f;
@@ -59,7 +59,6 @@ void loop() {
     if(line_A != line_B){
       Line_flag = line.switchLineflag(line_ang);
       line_B = line_A;
-      go_ang = line.decideGoang(line_ang,Line_flag);
     }
     go_ang = line.decideGoang(line_ang,Line_flag);
     Serial.print("sawa");
@@ -70,7 +69,7 @@ void loop() {
       go_ang = ang_10 / 10.0 * ball.ang;
     }
     else if(abs(ball.ang) < 30){
-      go_ang = ((ang_30 - ang_10) / 20.0 * (abs(ball.ang - 10) + ang_10)) * ball.ang / abs(ball.ang);
+      go_ang = ((ang_30 - ang_10) / 20.0 * (abs(ball.ang) - 10) + ang_10)  * ball.ang / abs(ball.ang);
     }
     else if(abs(ball.ang) < 90){
       go_ang = ((ang_90 - ang_30) / 60.0 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
@@ -79,13 +78,15 @@ void loop() {
       go_ang = ((ang_180 - ang_90) / 90.0 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
     }
   }
-  Serial.print(" ");
-  Serial.print(ball.ang);
-  Serial.print(" ");
-  Serial.print(go_ang.degree);
-  Serial.println();
+  // Serial.print(" ");
+  // Serial.print(ball.ang);
+  // Serial.print(" ");
+  // Serial.print(go_ang.degree);
+  // Serial.print(" ");
+  
 
   motor(go_ang.degree,AC_val);
+  Serial.println();
   if(toogle_f != digitalRead(toogle_P)){
     for(int i = 0; i < 4; i++){
       analogWrite(PWM_p[i][0],0);
