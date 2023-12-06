@@ -5,7 +5,7 @@
 
 BALL ball;
 int A = 1;
-int val = 120;
+int val = 160;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
@@ -23,7 +23,7 @@ int line_B = 999;
 int Line_flag = 0;
 
 const int ang_180 = 210;
-const int ang_90 = 150;
+const int ang_90 = 165;
 const int ang_30 = 60;
 const int ang_10 = 10;
 
@@ -54,7 +54,7 @@ void loop() {
 
   float AC_val = ac.getAC_val();
 
-  if(0){
+  if(line.LINE_on){
     angle line_ang(line.ang,true);
     if(line_A != line_B){
       Line_flag = line.switchLineflag(line_ang);
@@ -65,6 +65,7 @@ void loop() {
   }
   else{
     line_B = 0;
+    Line_flag = 0;
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
     }
@@ -84,6 +85,7 @@ void loop() {
   // Serial.print(go_ang.degree);
   // Serial.print(" ");
   
+  // line.print();
 
   motor(go_ang.degree,AC_val);
   Serial.println();
