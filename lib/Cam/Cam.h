@@ -7,8 +7,9 @@ class Cam{
     private:
         int B = 999;
         int A = 0;
+        int F = 0;
     public:
-        Cam();
+        Cam(int);
         float ang;
         float Size;
         void print();

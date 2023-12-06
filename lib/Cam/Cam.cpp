@@ -1,10 +1,17 @@
 #include<Cam.h>
 
 
-Cam::Cam(){
-    Serial3.begin(9600);
+Cam::Cam(int flag){
     csize.setLenth(20);
     csize.reset();
+    if(flag == 3){
+        F = 3;
+        Serial3.begin(9600);
+    }
+    else if(flag == 4){
+        F = 4;
+        Serial4.begin(9600);
+    }
 }
 
 

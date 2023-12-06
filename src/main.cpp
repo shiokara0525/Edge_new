@@ -2,7 +2,7 @@
 #include<Cam.h>
 #include<ac.h>
 
-Cam cam;
+Cam cam(3);
 
 void setup() {
   Serial.begin(9600);
