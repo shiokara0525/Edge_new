@@ -49,23 +49,26 @@ void setup() {
 
 void loop() {
   angle go_ang(0,true);
-  ball.getBallposition();
-  line.getLINE_Vec(x,y,num);
+  float AC_val = 0;
 
-  float AC_val = ac.getAC_val();
-
-  if(line.LINE_on){
-    angle line_ang(line.ang,true);
-    if(line_A != line_B){
-      Line_flag = line.switchLineflag(line_ang);
-      line_B = line_A;
+  if(A == 0){
+    ball.getBallposition();
+    line.getLINE_Vec(x,y,num);
+    AC_val = ac.getAC_val();
+    if(line.LINE_on){
+      A = 20;
     }
-    go_ang = line.decideGoang(line_ang,Line_flag);
-    Serial.print("sawa");
+    else{
+      A = 10;
+    }
   }
-  else{
-    line_B = 0;
-    Line_flag = 0;
+
+  if(A == 10){
+    if(line_A != line_B){
+      line_B = line_A;
+      Line_flag = 0;
+    }
+
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
     }
@@ -78,17 +81,34 @@ void loop() {
     else{
       go_ang = ((ang_180 - ang_90) / 90.0 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
     }
+    A = 90;
   }
-  // Serial.print(" ");
-  // Serial.print(ball.ang);
-  // Serial.print(" ");
-  // Serial.print(go_ang.degree);
-  // Serial.print(" ");
-  
-  // line.print();
 
-  motor(go_ang.degree,AC_val);
-  Serial.println();
+  if(A == 20){
+    angle line_ang(line.ang,true);
+    if(line_A != line_B){
+      Line_flag = line.switchLineflag(line_ang);
+      line_B = line_A;
+    }
+    go_ang = line.decideGoang(line_ang,Line_flag);
+    Serial.print("sawa");
+    A = 90;
+  }
+
+  if(A == 90){
+    motor(go_ang.degree,AC_val);
+
+    // Serial.print(" ");
+    // Serial.print(ball.ang);
+    // Serial.print(" ");
+    // Serial.print(go_ang.degree);
+    // Serial.print(" ");
+    
+    // line.print();
+    Serial.println();
+    A = 0;
+  }
+
   if(toogle_f != digitalRead(toogle_P)){
     for(int i = 0; i < 4; i++){
       analogWrite(PWM_p[i][0],0);
