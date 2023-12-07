@@ -4,10 +4,11 @@
 #include<ball.h>
 #include<line.h>
 #include<motor_a.h>
+#include<timer.h>
 
 BALL ball;
 int A = 0;
-int val = 135;
+int val = 150;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
@@ -36,6 +37,12 @@ int toogle_P = 27;
 
 Cam cam_front(4);
 Cam cam_back(3);
+int AC_A;
+int AC_B;
+int AC_F;
+int cam_flag = 0;
+timer cam_T2;
+float AC_ch();
 
 void setup() {
   Serial.begin(9600);
@@ -57,12 +64,12 @@ void setup() {
 
 void loop() {
   angle go_ang(0,true);
-  float AC_val = 0;
+  int AC_val = AC_ch();
+  int go_val = val;
 
   if(A == 0){
     ball.getBallposition();
     line.getLINE_Vec(x,y,num);
-    AC_val = ac.getAC_val();
     if(line.LINE_on){
       A = 20;
       line_A = 1;
@@ -88,6 +95,9 @@ void loop() {
     else{
       go_ang = ((ang_180 - ang_90) / 90.0 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
     }
+    if(AC_F == 1){
+      go_val = 100;
+    }
     A = 90;
   }
 
@@ -98,21 +108,23 @@ void loop() {
       line_B = line_A;
     }
     go_ang = line.decideGoang(line_ang,Line_flag);
-    Serial.print("sawa");
+    // Serial.print("sawa");
     A = 90;
   }
 
   if(A == 90){
-    MOTOR.moveMotor_0(go_ang,val,AC_val,0);
+    MOTOR.moveMotor_0(go_ang,go_val,AC_val,0);
 
-    // Serial.print(" ");
-    // Serial.print(ball.ang);
-    // Serial.print(" ");
-    // Serial.print(go_ang.degree);
+    Serial.print(" ");
+    Serial.print(ball.ang);
+    Serial.print(" ");
+    Serial.print(go_ang.degree);
+    Serial.print(" ");
+    Serial.print(go_val);
     // Serial.print(" ");
     // Serial.print(Line_flag);
     // line.print();
-    ac.print();
+    // cam_front.print();
     Serial.println();
     A = 0;
   }
@@ -125,6 +137,49 @@ void loop() {
     toogle_f = digitalRead(toogle_P);
     ac.setup_2();
   }
+}
+
+
+
+float AC_ch(){
+  float AC_val = 0;
+  angle ball_(ball.ang + ac.dir,true);
+  ball_.to_range(180,true);
+  AC_A = 0;
+  AC_F = 0;
+  cam_flag = cam_front.on;
+
+  if(cam_flag == 1){
+    Serial.print(" sawa ");
+    if(AC_B == 1){
+      if(abs(ball.ang) < 50 && abs(ball_.degree) < 60){
+        AC_A = 1;
+      }
+    }
+    else if(AC_B == 0){
+      if(abs(ball.ang) < 20 && abs(ball_.degree) < 60){
+        AC_A = 1;
+      }
+    }
+  }
+
+  if(AC_A == 0){
+    if(AC_A != AC_B){
+      AC_B = AC_A;
+    }
+    AC_val = ac.getAC_val();
+  }
+  else if(AC_A == 1){
+    if(AC_A != AC_B){
+      cam_T2.reset();
+      AC_B = AC_A;
+    }
+    if(cam_T2.read_ms() < 250){
+      AC_F = 1;
+    }
+    AC_val = ac.getCam_val(cam_front.ang);
+  }
+  return AC_val;
 }
 
 
@@ -153,7 +208,7 @@ void serialEvent3(){
       cam_back.ang = reBuf[1] - 127;
     }
   }
-  Serial.println("sawa");
+  // Serial.println("sawa");
 }
 
 
@@ -180,11 +235,12 @@ void serialEvent4(){
     else{
       cam_front.on = 1;
       cam_front.Size = reBuf[2];
-      cam_front.ang = reBuf[1] - 127;
+      cam_front.ang = -(reBuf[1] - 127);
     }
   }
-  Serial.println("sawa");
+  // Serial.println("sawa");
 }
+
 
 
 void serialEvent6(){
@@ -236,7 +292,6 @@ void serialEvent6(){
   }
   // Serial.println();
 }
-
 
 
 

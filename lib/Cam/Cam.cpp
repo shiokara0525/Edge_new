@@ -18,12 +18,12 @@ Cam::Cam(int flag){
 
 void Cam::print(){
     if(on == 0){
-        Serial.println("No block detected");
+        Serial.print("No block detected");
     }
     else{
         Serial.print("  ang: ");
         Serial.print(ang);
         Serial.print("  size: ");
-        Serial.println(Size);
+        Serial.print(Size);
     }
 }
