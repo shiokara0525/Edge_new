@@ -2,15 +2,18 @@
 #include<ac.h>
 #include<ball.h>
 #include<line.h>
+#include<motor_a.h>
 
 BALL ball;
-int A = 1;
+int A = 0;
 int val = 160;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
 AC ac;
 int LED = 13;
+
+motor_attack MOTOR;
 void motor(float ang,float ac_v);
 
 LINE line;
@@ -47,6 +50,8 @@ void setup() {
   toogle_f = digitalRead(toogle_P);
 }
 
+
+
 void loop() {
   angle go_ang(0,true);
   float AC_val = 0;
@@ -57,18 +62,16 @@ void loop() {
     AC_val = ac.getAC_val();
     if(line.LINE_on){
       A = 20;
+      line_A = 1;
     }
     else{
       A = 10;
+      line_A = 0;
+      line_B = 0;
     }
   }
 
   if(A == 10){
-    if(line_A != line_B){
-      line_B = line_A;
-      Line_flag = 0;
-    }
-
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
     }
@@ -96,13 +99,13 @@ void loop() {
   }
 
   if(A == 90){
-    motor(go_ang.degree,AC_val);
+    // MOTOR.Moutput(1,100);
 
-    // Serial.print(" ");
-    // Serial.print(ball.ang);
-    // Serial.print(" ");
-    // Serial.print(go_ang.degree);
-    // Serial.print(" ");
+    Serial.print(" ");
+    Serial.print(ball.ang);
+    Serial.print(" ");
+    Serial.print(go_ang.degree);
+    Serial.print(" ");
     
     // line.print();
     Serial.println();
