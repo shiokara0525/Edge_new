@@ -6,7 +6,7 @@
 
 BALL ball;
 int A = 0;
-int val = 160;
+int val = 135;
 int PWM_p[5][2] = {
   {7,6},{2,3},{5,4},{8,9},{0,1}
 };
@@ -68,6 +68,7 @@ void loop() {
       A = 10;
       line_A = 0;
       line_B = 0;
+      Line_flag = 0;
     }
   }
 
@@ -99,58 +100,27 @@ void loop() {
   }
 
   if(A == 90){
-    // MOTOR.Moutput(1,100);
+    MOTOR.moveMotor_0(go_ang,val,AC_val,0);
 
-    Serial.print(" ");
-    Serial.print(ball.ang);
-    Serial.print(" ");
-    Serial.print(go_ang.degree);
-    Serial.print(" ");
-    
+    // Serial.print(" ");
+    // Serial.print(ball.ang);
+    // Serial.print(" ");
+    // Serial.print(go_ang.degree);
+    // Serial.print(" ");
+    // Serial.print(Line_flag);
     // line.print();
+    ac.print();
     Serial.println();
     A = 0;
   }
 
   if(toogle_f != digitalRead(toogle_P)){
-    for(int i = 0; i < 4; i++){
-      analogWrite(PWM_p[i][0],0);
-      analogWrite(PWM_p[i][1],0);
-    }
+    Serial.print(" !!!!! ");
+    MOTOR.motor_0();
+    toogle_f = digitalRead(toogle_P);
     while(toogle_f == digitalRead(toogle_P));
+    toogle_f = digitalRead(toogle_P);
     ac.setup_2();
-  }
-}
-
-
-
-void motor(float ang,float ac_v){
-  double mSin[4] = {1,1,-1,-1};  //行列式のsinの値
-  double mCos[4] = {1,-1,-1,1};  //行列式のcosの値
-  float X = cos(radians(ang));
-  float Y = sin(radians(ang));
-  float Mval[4];
-  double g = 0;                //モーターの最終的に出る最終的な値の比の基準になる値
-  float val_ = val;
-  val_ -= ac_v;
-
-  for(int i = 0; i < 4; i++){
-    Mval[i] = -mSin[i] * X + mCos[i] * Y; //モーターの回転速度を計算(行列式で管理)
-    if(abs(Mval[i]) > g){  //絶対値が一番高い値だったら
-      g = abs(Mval[i]);    //一番大きい値を代入
-    }
-  }
-
-  for(int i = 0; i < 4; i++){
-    Mval[i] = Mval[i] / g * val_ + ac_v;  //モーターの値を計算(進みたいベクトルの値と姿勢制御の値を合わせる)
-    if(Mval[i] < 0){
-      analogWrite(PWM_p[i][0],abs(Mval[i]));
-      analogWrite(PWM_p[i][1],0);
-    }
-    else if(0 < Mval[i]){
-      analogWrite(PWM_p[i][0],0);
-      analogWrite(PWM_p[i][1],abs(Mval[i]));
-    }
   }
 }
 
