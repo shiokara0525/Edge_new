@@ -7,12 +7,12 @@ class Cam{
     private:
         int B = 999;
         int A = 0;
+        int F = 0;
     public:
-        Cam();
+        Cam(int);
         float ang;
         float Size;
         void print();
-        float P = 0;
         int on = 0;
         int color = 0;
         MA csize;
