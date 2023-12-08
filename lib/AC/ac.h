@@ -34,12 +34,12 @@ private:
 
   double val_old = 0;  //1F前の姿勢制御の値
 
-  const float kp = 1.8;  //比例制御の係数
-  const float kd = 0.05; //微分制御の係数
+  const float kp = 0.9;  //比例制御の係数
+  const float kd = 0.02; //微分制御の係数
   const float time = 100 / 3;
 
-  const float kp_c = 0.6;
-  const float kd_c = 0.06;
+  const float kp_c = 0.3;
+  const float kd_c = 0.03;
 
   sensors_event_t event;  //ジャイロのいろんな値入れるやつ
   Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);

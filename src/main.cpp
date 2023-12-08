@@ -83,17 +83,31 @@ void loop() {
   }
 
   if(A == 10){
+    int ang_180_ = 210;
+    int ang_90_ = 165;
+    int ang_30_ = 60;
+    int ang_10_ = 10;
+
+    if(AC_F == 1){
+      ang_30_ = 90; 
+    }
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
     }
     else if(abs(ball.ang) < 30){
-      go_ang = ((ang_30 - ang_10) / 20.0 * (abs(ball.ang) - 10) + ang_10)  * ball.ang / abs(ball.ang);
+      go_ang = ((ang_30_ - ang_10_) / 20.0 * (abs(ball.ang) - 10) + ang_10_)  * ball.ang / abs(ball.ang);
     }
     else if(abs(ball.ang) < 90){
-      go_ang = ((ang_90 - ang_30) / 60.0 * (abs(ball.ang) - 30) + ang_30) * ball.ang / abs(ball.ang);
+      go_ang = ((ang_90_ - ang_30_) / 60.0 * (abs(ball.ang) - 30) + ang_30_) * ball.ang / abs(ball.ang);
     }
     else{
-      go_ang = ((ang_180 - ang_90) / 90.0 * (abs(ball.ang) - 90) + ang_90) * ball.ang / abs(ball.ang);
+      go_ang = ((ang_180_ - ang_90_) / 90.0 * (abs(ball.ang) - 90) + ang_90_) * ball.ang / abs(ball.ang);
+    }
+
+    if(AC_A == 1){
+      if(abs(ball.ang) < 10){
+        go_ang = 0;
+      }
     }
     if(AC_F == 1){
       go_val = 100;
@@ -174,7 +188,7 @@ float AC_ch(){
       cam_T2.reset();
       AC_B = AC_A;
     }
-    if(cam_T2.read_ms() < 250){
+    if(cam_T2.read_ms() < 200){
       AC_F = 1;
     }
     AC_val = ac.getCam_val(cam_front.ang);
