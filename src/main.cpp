@@ -8,7 +8,7 @@
 
 BALL ball;
 int A = 0;
-int val = 150;
+int val = 160;
 AC ac;
 int LED = 13;
 
@@ -24,7 +24,7 @@ int line_B = 999;
 int Line_flag = 0;
 
 const int ang_180 = 210;
-const int ang_90 = 155;
+const int ang_90 = 165;
 const int ang_30 = 60;
 const int ang_10 = 10;
 int S_A = 0;
@@ -294,7 +294,7 @@ void kick(){
   delay(10);
   digitalWrite(K,HIGH);
   digitalWrite(LED,HIGH);
-  delay(50);
+  delay(10);
   digitalWrite(K,LOW);
   digitalWrite(LED,LOW);
   delay(10);
