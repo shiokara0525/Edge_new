@@ -11,22 +11,22 @@ void setup() {
   pinMode(K,OUTPUT);
   pinMode(C,OUTPUT);
   pinMode(LED,OUTPUT);
-  digitalWrite(C,HIGH);
-  digitalWrite(K,HIGH);
-  digitalWrite(LED,HIGH);
+  // digitalWrite(C,HIGH);
+  // digitalWrite(K,HIGH);
+  // digitalWrite(LED,HIGH);
 }
 
 void loop() {
-  // digitalWrite(C,HIGH);
-  // digitalWrite(K,LOW);
-  // digitalWrite(LED,LOW);
-  // delay(5000);
-  // digitalWrite(C,LOW);
-  // delay(500);
-  // digitalWrite(K,HIGH);
-  // digitalWrite(LED,HIGH);
-  // delay(500);
-  // digitalWrite(K,LOW);
-  // digitalWrite(LED,LOW);
-  // delay(500);
+  digitalWrite(C,HIGH);
+  digitalWrite(K,LOW);
+  digitalWrite(LED,LOW);
+  delay(5000);
+  digitalWrite(C,LOW);
+  delay(500);
+  digitalWrite(K,HIGH);
+  digitalWrite(LED,HIGH);
+  delay(500);
+  digitalWrite(K,LOW);
+  digitalWrite(LED,LOW);
+  delay(500);
 }
