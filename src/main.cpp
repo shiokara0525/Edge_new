@@ -145,7 +145,7 @@ void loop() {
         S_B = S_A;
         S_t.reset();
       }
-      if(200 < S_t.read_ms()){
+      if(300 < S_t.read_ms()){
         kick();
         S_t.reset();
         k_t.reset();
@@ -291,13 +291,13 @@ float AC_ch(){
 
 void kick(){
   digitalWrite(C,LOW);
-  delay(100);
+  delay(10);
   digitalWrite(K,HIGH);
   digitalWrite(LED,HIGH);
-  delay(100);
+  delay(50);
   digitalWrite(K,LOW);
   digitalWrite(LED,LOW);
-  delay(100);
+  delay(10);
   digitalWrite(C,HIGH);
 }
 
