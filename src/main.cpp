@@ -71,6 +71,7 @@ void loop() {
       line_A = 0;
       if(line_A != line_B){
         if(Line_flag == 3){
+          Serial.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           if((60 < abs(ball.ang) && abs(ball.ang) < 120) && (cam_front.Size < 15 || 50 < cam_back.Size)){
             A = 40;
           }
@@ -121,6 +122,7 @@ void loop() {
 
 
   if(A == 20){
+    Serial.print(" sawa ");
     angle line_ang(line.ang,true);
     if(line_A != line_B){
       Line_flag = line.switchLineflag(line_ang);
@@ -157,12 +159,13 @@ void loop() {
 
 
   if(A == 50){
+    Serial.print("50!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     while(45 < abs(ball.ang) && abs(ball.ang) < 75){
       ball.getBallposition();
       AC_val = ac.getAC_val();
       go_ang = 0;
       MOTOR.moveMotor_0(go_ang,go_val,AC_val,0);
-
+      delay(500);
       if(line.getLINE_Vec(x,y,num) == 1){
         break;
       }
@@ -179,16 +182,19 @@ void loop() {
     // Serial.print(" ");
     // Serial.print(go_ang.degree);
     // Serial.print(" ");
-    cam_front.print();
-    Serial.print(" ");
-    cam_back.print();
-    Serial.print(" ");
-    Serial.print(Line_flag);
+    // cam_front.print();
+    // Serial.print(" ");
+    // cam_back.print();
+    // Serial.print(" ");
+    // Serial.print(Line_flag);
     // Serial.print(go_val);
     // Serial.print(" ");
     // Serial.print(Line_flag);
     // line.print();
     // cam_front.print();
+    ball.print();
+    Serial.print(" ");
+    cam_back.print();
     Serial.println();
     A = 0;
   }
