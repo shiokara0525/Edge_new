@@ -2,8 +2,8 @@
 #include<Adafruit_NeoPixel.h>
 #include<Cam.h>
 
-const int C = 31;
-const int K = 32;
+const int C = 32;
+const int K = 31;
 const int LED = 13;
 
 
@@ -17,12 +17,16 @@ void setup() {
 }
 
 void loop() {
+  // digitalWrite(C,HIGH);
   // digitalWrite(K,LOW);
   // digitalWrite(LED,LOW);
   // delay(5000);
+  // digitalWrite(C,LOW);
+  // delay(500);
   // digitalWrite(K,HIGH);
   // digitalWrite(LED,HIGH);
-  // delay(1000);
+  // delay(500);
   // digitalWrite(K,LOW);
   // digitalWrite(LED,LOW);
+  // delay(500);
 }
