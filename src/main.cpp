@@ -24,9 +24,13 @@ int line_B = 999;
 int Line_flag = 0;
 
 const int ang_180 = 210;
-const int ang_90 = 140;
+const int ang_90 = 155;
 const int ang_30 = 60;
 const int ang_10 = 10;
+int S_A = 0;
+int S_B = 999;
+timer S_t;
+timer k_t;
 
 int toogle_f;
 int toogle_P = 27;
@@ -43,8 +47,7 @@ float AC_ch();
 
 const int C = 32;
 const int K = 31;
-const int LED = 13;
-
+void kick();
 
 void setup() {
   Serial.begin(9600);
@@ -104,6 +107,7 @@ void loop() {
     int ang_90_ = ang_90;
     int ang_30_ = ang_30;
     int ang_10_ = ang_10;
+    S_A = 0;
 
     if(AC_F == 1){
       ang_30_ = 135; 
@@ -124,10 +128,28 @@ void loop() {
     if(AC_A == 1){
       if(abs(ball.ang) < 10){
         go_ang = 0;
+        S_A = 1;
       }
     }
     if(AC_F == 1){
       go_val = 120;
+    }
+
+    if(S_A == 0){
+      if(S_A != S_B){
+        S_B = S_A;
+      }
+    }
+    else if(S_A == 1){
+      if(S_A != S_B){
+        S_B = S_A;
+        S_t.reset();
+      }
+      if(200 < S_t.read_ms()){
+        kick();
+        S_t.reset();
+        k_t.reset();
+      }
     }
     A = 90;
   }
