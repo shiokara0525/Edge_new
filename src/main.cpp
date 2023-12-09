@@ -9,14 +9,10 @@
 BALL ball;
 int A = 0;
 int val = 150;
-int PWM_p[5][2] = {
-  {7,6},{2,3},{5,4},{8,9},{0,1}
-};
 AC ac;
 int LED = 13;
 
 motor_attack MOTOR;
-void motor(float ang,float ac_v);
 
 LINE line;
 int x = 0;
@@ -28,7 +24,7 @@ int line_B = 999;
 int Line_flag = 0;
 
 const int ang_180 = 210;
-const int ang_90 = 165;
+const int ang_90 = 140;
 const int ang_30 = 60;
 const int ang_10 = 10;
 
@@ -48,10 +44,6 @@ void setup() {
   Serial.begin(9600);
   Serial6.begin(57600);
   Serial8.begin(57600);
-  for(int i = 0; i < 5; i++){
-    pinMode(PWM_p[i][0],OUTPUT);
-    pinMode(PWM_p[i][1],OUTPUT);
-  }
   ac.setup();
 
   toogle_f = digitalRead(toogle_P);
@@ -77,19 +69,24 @@ void loop() {
     else{
       A = 10;
       line_A = 0;
-      line_B = 0;
+      if(line_A != line_B){
+        if(Line_flag == 3 && (60 < abs(ball.ang) && abs(ball.ang) < 120) && (cam_front.Size < 15 || 50 < cam_back.Size)){
+          A = 40;
+        }
+        line_B = line_A;
+      }
       Line_flag = 0;
     }
   }
 
   if(A == 10){
-    int ang_180_ = 210;
-    int ang_90_ = 165;
-    int ang_30_ = 60;
-    int ang_10_ = 10;
+    int ang_180_ = ang_180;
+    int ang_90_ = ang_90;
+    int ang_30_ = ang_30;
+    int ang_10_ = ang_10;
 
     if(AC_F == 1){
-      ang_30_ = 90; 
+      ang_30_ = 135; 
     }
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
@@ -110,10 +107,12 @@ void loop() {
       }
     }
     if(AC_F == 1){
-      go_val = 100;
+      go_val = 120;
     }
     A = 90;
   }
+
+
 
   if(A == 20){
     angle line_ang(line.ang,true);
@@ -126,15 +125,45 @@ void loop() {
     A = 90;
   }
 
+
+  if(A == 40){
+    while(30 < abs(ball.ang) && abs(ball.ang) < 150){
+      ball.getBallposition();
+      AC_val = ac.getAC_val();
+      if(ball.ang < 0){
+        go_ang = -90;
+      }
+      else{
+        go_ang = 90;
+      }
+      ball.print();
+      Serial.println(line.LINE_on);
+      MOTOR.moveMotor_0(go_ang,go_val,AC_val,0);
+
+      if(line.getLINE_Vec(x,y,num) == 1){
+        break;
+      }
+    }
+    A = 0;
+    Serial.print(A);
+    Serial.println("!!!!!!!!!!!!!!!!!!");
+  }
+
+
   if(A == 90){
     MOTOR.moveMotor_0(go_ang,go_val,AC_val,0);
 
+    // Serial.print(" ");
+    // Serial.print(ball.ang);
+    // Serial.print(" ");
+    // Serial.print(go_ang.degree);
+    // Serial.print(" ");
+    cam_front.print();
     Serial.print(" ");
-    Serial.print(ball.ang);
+    cam_back.print();
     Serial.print(" ");
-    Serial.print(go_ang.degree);
-    Serial.print(" ");
-    Serial.print(go_val);
+    Serial.print(Line_flag);
+    // Serial.print(go_val);
     // Serial.print(" ");
     // Serial.print(Line_flag);
     // line.print();
@@ -150,6 +179,7 @@ void loop() {
     while(toogle_f == digitalRead(toogle_P));
     toogle_f = digitalRead(toogle_P);
     ac.setup_2();
+    A = 0;
   }
 }
 
@@ -164,7 +194,7 @@ float AC_ch(){
   cam_flag = cam_front.on;
 
   if(cam_flag == 1){
-    Serial.print(" sawa ");
+    // Serial.print(" sawa ");
     if(AC_B == 1){
       if(abs(ball.ang) < 50 && abs(ball_.degree) < 60){
         AC_A = 1;
