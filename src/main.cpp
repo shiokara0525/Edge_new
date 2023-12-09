@@ -6,27 +6,31 @@ const int C = 32;
 const int K = 31;
 const int LED = 13;
 
+void kick();
 
 void setup() {
   pinMode(K,OUTPUT);
   pinMode(C,OUTPUT);
   pinMode(LED,OUTPUT);
-  // digitalWrite(C,HIGH);
-  // digitalWrite(K,HIGH);
-  // digitalWrite(LED,HIGH);
-}
-
-void loop() {
   digitalWrite(C,HIGH);
   digitalWrite(K,LOW);
   digitalWrite(LED,LOW);
-  delay(5000);
+}
+
+void loop() {
+  delay(2000);
+  kick();
+}
+
+
+void kick(){
   digitalWrite(C,LOW);
-  delay(500);
+  delay(100);
   digitalWrite(K,HIGH);
   digitalWrite(LED,HIGH);
   delay(500);
   digitalWrite(K,LOW);
   digitalWrite(LED,LOW);
-  delay(500);
+  delay(100);
+  digitalWrite(C,HIGH);
 }
