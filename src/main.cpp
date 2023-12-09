@@ -40,11 +40,24 @@ int cam_flag = 0;
 timer cam_T2;
 float AC_ch();
 
+
+const int C = 32;
+const int K = 31;
+const int LED = 13;
+
+
 void setup() {
   Serial.begin(9600);
   Serial6.begin(57600);
   Serial8.begin(57600);
   ac.setup();
+
+  pinMode(K,OUTPUT);
+  pinMode(C,OUTPUT);
+  pinMode(LED,OUTPUT);
+  digitalWrite(C,HIGH);
+  digitalWrite(K,LOW);
+  digitalWrite(LED,LOW);
 
   toogle_f = digitalRead(toogle_P);
   while(digitalRead(toogle_P) == toogle_f);
@@ -251,6 +264,19 @@ float AC_ch(){
     AC_val = ac.getCam_val(cam_front.ang);
   }
   return AC_val;
+}
+
+
+void kick(){
+  digitalWrite(C,LOW);
+  delay(100);
+  digitalWrite(K,HIGH);
+  digitalWrite(LED,HIGH);
+  delay(100);
+  digitalWrite(K,LOW);
+  digitalWrite(LED,LOW);
+  delay(100);
+  digitalWrite(C,HIGH);
 }
 
 
