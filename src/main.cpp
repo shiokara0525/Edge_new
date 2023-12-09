@@ -28,7 +28,7 @@ void kick(){
   delay(100);
   digitalWrite(K,HIGH);
   digitalWrite(LED,HIGH);
-  delay(500);
+  delay(100);
   digitalWrite(K,LOW);
   digitalWrite(LED,LOW);
   delay(100);
