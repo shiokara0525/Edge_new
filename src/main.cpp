@@ -8,7 +8,7 @@
 
 BALL ball;
 int A = 0;
-int val = 160;
+int val = 210;
 AC ac;
 int LED = 13;
 
@@ -60,12 +60,24 @@ void setup() {
   pinMode(LED,OUTPUT);
   digitalWrite(C,HIGH);
   digitalWrite(K,LOW);
-  digitalWrite(LED,LOW);
+  digitalWrite(LED,HIGH);
 
   toogle_f = digitalRead(toogle_P);
-  while(digitalRead(toogle_P) == toogle_f);
+  while(digitalRead(toogle_P) == toogle_f){
+    // if(cam_front.on == 1){
+    //   digitalWrite(LED,HIGH);
+    //   delay(200);
+    //   digitalWrite(LED,LOW);
+    //   delay(200);
+    // }
+  }
+  digitalWrite(LED,LOW);
   ac.setup_2();
   toogle_f = digitalRead(toogle_P);
+  delay(100);
+  while(digitalRead(toogle_P) == toogle_f);
+  toogle_f = digitalRead(toogle_P);
+  Serial.println("ba-----ka");
 }
 
 
@@ -87,19 +99,34 @@ void loop() {
       line_A = 0;
       if(line_A != line_B){
         if(Line_flag == 3){
-          Serial.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
           if((60 < abs(ball.ang) && abs(ball.ang) < 120) && (cam_front.Size < 15 || 50 < cam_back.Size)){
             A = 40;
           }
-          else if((45 < abs(ball.ang) && abs(ball.ang) < 75) && cam_back.on == 0){
-            A = 50;
-            Serial.print("50!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-          }
+          // else if((45 < abs(ball.ang) && abs(ball.ang) < 75) && cam_back.on == 0){
+          //   A = 50;
+          // }
         }
         line_B = line_A;
       }
-      Line_flag = 0;
+      // if(ball.flag == 0){
+      //   A = 5;
+      //   Serial.print("5");
+      // }
     }
+  }
+
+  if(A == 5){
+    MOTOR.motor_0();
+    while(ball.flag == 0){
+      ball.getBallposition();
+      digitalWrite(LED,HIGH);
+      delay(100);
+      digitalWrite(LED,LOW);
+      delay(100);
+      ball.print();
+      Serial.println();
+    }
+    A = 0;
   }
 
   if(A == 10){
@@ -110,7 +137,8 @@ void loop() {
     S_A = 0;
 
     if(AC_F == 1){
-      ang_30_ = 135; 
+      ang_30_ = 150;
+      ang_90_ = 180;
     }
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
@@ -145,7 +173,7 @@ void loop() {
         S_B = S_A;
         S_t.reset();
       }
-      if(300 < S_t.read_ms()){
+      if(350 < S_t.read_ms()){
         kick();
         S_t.reset();
         k_t.reset();
@@ -157,14 +185,12 @@ void loop() {
 
 
   if(A == 20){
-    Serial.print(" sawa ");
     angle line_ang(line.ang,true);
     if(line_A != line_B){
       Line_flag = line.switchLineflag(line_ang);
       line_B = line_A;
     }
     go_ang = line.decideGoang(line_ang,Line_flag);
-    // Serial.print("sawa");
     A = 90;
   }
 
@@ -188,13 +214,10 @@ void loop() {
       }
     }
     A = 0;
-    Serial.print(A);
-    Serial.println("!!!!!!!!!!!!!!!!!!");
   }
 
 
   if(A == 50){
-    Serial.print("50!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     while(45 < abs(ball.ang) && abs(ball.ang) < 75){
       ball.getBallposition();
       AC_val = ac.getAC_val();
@@ -212,35 +235,25 @@ void loop() {
   if(A == 90){
     MOTOR.moveMotor_0(go_ang,go_val,AC_val,0);
 
-    // Serial.print(" ");
-    // Serial.print(ball.ang);
-    // Serial.print(" ");
-    // Serial.print(go_ang.degree);
-    // Serial.print(" ");
-    // cam_front.print();
-    // Serial.print(" ");
-    // cam_back.print();
-    // Serial.print(" ");
-    // Serial.print(Line_flag);
-    // Serial.print(go_val);
-    // Serial.print(" ");
-    // Serial.print(Line_flag);
-    // line.print();
-    // cam_front.print();
     ball.print();
     Serial.print(" ");
-    cam_back.print();
     Serial.println();
     A = 0;
   }
 
   if(toogle_f != digitalRead(toogle_P)){
+    digitalWrite(LED,HIGH);
     Serial.print(" !!!!! ");
     MOTOR.motor_0();
     toogle_f = digitalRead(toogle_P);
-    while(toogle_f == digitalRead(toogle_P));
-    toogle_f = digitalRead(toogle_P);
+    while(digitalRead(toogle_P) == toogle_f);
+    digitalWrite(LED,LOW);
     ac.setup_2();
+    toogle_f = digitalRead(toogle_P);
+    delay(100);
+    while(digitalRead(toogle_P) == toogle_f);
+    toogle_f = digitalRead(toogle_P);
+    Serial.println("ba-----ka");
     A = 0;
   }
 }
@@ -263,7 +276,7 @@ float AC_ch(){
       }
     }
     else if(AC_B == 0){
-      if(abs(ball.ang) < 20 && abs(ball_.degree) < 60){
+      if(abs(ball.ang) < 20 && abs(ball_.degree) < 60 && abs(ball.ang) < 50){
         AC_A = 1;
       }
     }
@@ -280,7 +293,7 @@ float AC_ch(){
       cam_T2.reset();
       AC_B = AC_A;
     }
-    if(cam_T2.read_ms() < 200){
+    if(cam_T2.read_ms() < 350){
       AC_F = 1;
     }
     AC_val = ac.getCam_val(cam_front.ang);
