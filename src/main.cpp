@@ -8,7 +8,7 @@
 
 BALL ball;
 int A = 0;
-int val = 210;
+int val = 160;
 AC ac;
 int LED = 13;
 
