@@ -15,10 +15,10 @@ class motor_attack{
         int line_val = 2;
         int NoneM_flag = 0;
         float Moutput(int,float);
-    private:
         int PWM_p[5][2] = {
             {7,6},{2,3},{5,4},{8,9},{0,1}
         };
+    private:
         double mSin[4] = {1,1,-1,-1};  //行列式のsinの値
         double mCos[4] = {1,-1,-1,1};  //行列式のcosの値
         MA Motor[4];
