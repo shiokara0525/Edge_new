@@ -243,7 +243,6 @@ void loop() {
 
   if(toogle_f != digitalRead(toogle_P)){
     digitalWrite(LED,HIGH);
-    Serial.print(" !!!!! ");
     MOTOR.motor_0();
     toogle_f = digitalRead(toogle_P);
     while(digitalRead(toogle_P) == toogle_f);
@@ -253,7 +252,6 @@ void loop() {
     delay(100);
     while(digitalRead(toogle_P) == toogle_f);
     toogle_f = digitalRead(toogle_P);
-    Serial.println("ba-----ka");
     A = 0;
   }
 }
