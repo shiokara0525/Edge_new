@@ -11,8 +11,8 @@ motor_attack MOTOR;
 
 void setup() {
   for(int i = 0; i < 5; i++){
-    analogWriteFrequency(MOTOR.PWM_p[i][0],100000);
-    MOTOR.Moutput(i,-200);
+    analogWriteFrequency(MOTOR.PWM_p[i][0],80000);
+    MOTOR.Moutput(i,-250);
   }
 }
 
