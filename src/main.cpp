@@ -54,6 +54,7 @@ void setup() {
   Serial6.begin(57600);
   Serial8.begin(57600);
   ac.setup();
+  cam_front.color = 0;  //青が0 黄色が1
 
   pinMode(K,OUTPUT);
   pinMode(C,OUTPUT);
@@ -285,6 +286,7 @@ float AC_ch(){
       AC_B = AC_A;
     }
     AC_val = ac.getAC_val();
+    MOTOR.Moutput(4,0);
   }
   else if(AC_A == 1){
     if(AC_A != AC_B){
@@ -295,12 +297,14 @@ float AC_ch(){
       AC_F = 1;
     }
     AC_val = ac.getCam_val(cam_front.ang);
+    MOTOR.Moutput(4,-150);
   }
   return AC_val;
 }
 
 
 void kick(){
+  MOTOR.Moutput(4,0);
   digitalWrite(C,LOW);
   delay(10);
   digitalWrite(K,HIGH);
@@ -310,16 +314,17 @@ void kick(){
   digitalWrite(LED,LOW);
   delay(10);
   digitalWrite(C,HIGH);
+  MOTOR.Moutput(4,-200);
 }
 
 
 void serialEvent3(){
-  uint8_t reBuf[4];
-  if(Serial3.available() < 4){
+  uint8_t reBuf[5];
+  if(Serial3.available() < 5){
     return;
   }
 
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 5; i++){
     reBuf[i] = Serial3.read();
     // Serial.print(reBuf[i]);
     // Serial.print(" ");
@@ -328,14 +333,16 @@ void serialEvent3(){
     Serial3.read();
   }
 
-  if(reBuf[0] == 38 && reBuf[3] == 37){
-    if(reBuf[2] == 0){
-      cam_back.on = 0;
+  if(reBuf[0] == 38 && reBuf[4] == 37){
+    if(reBuf[3] == 0){
+      cam_front.on = 0;
     }
     else{
-      cam_back.on = 1;
-      cam_back.Size = reBuf[2];
-      cam_back.ang = reBuf[1] - 127;
+      if(cam_back.color == reBuf[1]){
+        cam_front.on = 1;
+        cam_front.Size = reBuf[3];
+        cam_front.ang = -(reBuf[2] - 127);
+      }
     }
   }
   // Serial.println("sawa");
@@ -344,12 +351,12 @@ void serialEvent3(){
 
 
 void serialEvent4(){
-  uint8_t reBuf[4];
-  if(Serial4.available() < 4){
+  uint8_t reBuf[5];
+  if(Serial4.available() < 5){
     return;
   }
 
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 5; i++){
     reBuf[i] = Serial4.read();
     // Serial.print(reBuf[i]);
     // Serial.print(" ");
@@ -358,14 +365,16 @@ void serialEvent4(){
     Serial4.read();
   }
 
-  if(reBuf[0] == 38 && reBuf[3] == 37){
-    if(reBuf[2] == 0){
+  if(reBuf[0] == 38 && reBuf[4] == 37){
+    if(reBuf[3] == 0){
       cam_front.on = 0;
     }
     else{
-      cam_front.on = 1;
-      cam_front.Size = reBuf[2];
-      cam_front.ang = -(reBuf[1] - 127);
+      if(cam_front.color == reBuf[1]){
+        cam_front.on = 1;
+        cam_front.Size = reBuf[3];
+        cam_front.ang = -(reBuf[2] - 127);
+      }
     }
   }
   // Serial.println("sawa");
