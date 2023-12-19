@@ -78,7 +78,6 @@ void setup() {
   delay(100);
   while(digitalRead(toogle_P) == toogle_f);
   toogle_f = digitalRead(toogle_P);
-  Serial.println("ba-----ka");
 }
 
 
@@ -109,10 +108,9 @@ void loop() {
         }
         line_B = line_A;
       }
-      // if(ball.flag == 0){
-      //   A = 5;
-      //   Serial.print("5");
-      // }
+      if(ball.flag == 0){
+        A = 5;
+      }
     }
   }
 
