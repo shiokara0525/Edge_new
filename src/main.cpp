@@ -9,14 +9,10 @@
 BALL ball;
 int A = 0;
 int val = 150;
-int PWM_p[5][2] = {
-  {7,6},{2,3},{5,4},{8,9},{0,1}
-};
 AC ac;
 int LED = 13;
 
 motor_attack MOTOR;
-void motor(float ang,float ac_v);
 
 LINE line;
 int x = 0;
@@ -48,14 +44,18 @@ void setup() {
   Serial.begin(9600);
   Serial6.begin(57600);
   Serial8.begin(57600);
-  for(int i = 0; i < 5; i++){
-    pinMode(PWM_p[i][0],OUTPUT);
-    pinMode(PWM_p[i][1],OUTPUT);
-  }
   ac.setup();
-
+  pinMode(13,OUTPUT);
+  digitalWrite(13,HIGH);
+  delay(500);
+  digitalWrite(13,LOW);
+  delay(500);
+  digitalWrite(13,HIGH);
+  delay(500);
+  digitalWrite(13,LOW);
   toogle_f = digitalRead(toogle_P);
   while(digitalRead(toogle_P) == toogle_f);
+  Serial.print(" !! ");
   ac.setup_2();
   toogle_f = digitalRead(toogle_P);
 }
@@ -83,13 +83,13 @@ void loop() {
   }
 
   if(A == 10){
-    int ang_180_ = 210;
-    int ang_90_ = 165;
-    int ang_30_ = 60;
-    int ang_10_ = 10;
+    int ang_180_ = ang_180;
+    int ang_90_ = ang_90;
+    int ang_30_ = ang_30;
+    int ang_10_ = ang_10;
 
     if(AC_F == 1){
-      ang_30_ = 90; 
+      ang_30_ = 120; 
     }
     if(abs(ball.ang) < 10){
       go_ang = ang_10 / 10.0 * ball.ang;
