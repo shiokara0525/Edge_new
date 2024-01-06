@@ -17,7 +17,7 @@ class motor_attack{
         float Moutput(int,float);
     private:
         int PWM_p[5][2] = {
-            {7,6},{9,8},{4,5},{3,2},{0,1}
+            {3,2},{7,6},{4,5},{9,8},{0,1}
         };
         double mSin[4] = {1,1,-1,-1};  //行列式のsinの値
         double mCos[4] = {1,-1,-1,1};  //行列式のcosの値

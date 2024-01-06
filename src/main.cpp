@@ -17,7 +17,9 @@ void setup() {
 }
 
 void loop() {
-  for(int i = 0; i < 5; i++){
+  for(int i = 0; i < 4; i++){
     MOTOR.Moutput(i,100);
+    delay(500);
+    MOTOR.motor_0();
   }
 }
