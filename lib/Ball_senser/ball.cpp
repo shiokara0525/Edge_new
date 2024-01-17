@@ -6,6 +6,12 @@ BALL::BALL(){
     far__.setLenth(1000);
 }
 
+
+void BALL::begin(){
+    Serial8.begin(57600);
+}
+
+
 int BALL::getBallposition(){
     float x = ball_x.returnAve();
     float y = ball_y.returnAve();
@@ -57,6 +63,8 @@ void BALL::print(){
     Serial.print(y_pos);
     Serial.print(" dx : ");
     Serial.print(dx);
+    Serial.print(" catch : ");
+    Serial.print(ball_get);
     Serial.print(" flag : ");
     Serial.print(flag);
 }

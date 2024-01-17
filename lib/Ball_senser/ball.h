@@ -16,7 +16,9 @@ class BALL{
     int flag = 1;
     float dx;
     float far_;
+    int ball_get;
     BALL();
     int getBallposition();
     void print();
+    void begin();
 };
