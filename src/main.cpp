@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include<Adafruit_NeoPixel.h>
 #include<Cam.h>
 #include<ac.h>
 #include<motor_a.h>
