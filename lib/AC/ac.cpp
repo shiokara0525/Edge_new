@@ -6,15 +6,20 @@ double AC::getAC_val(){  //姿勢制御の値返す関数
   dir = getnowdir();
 
   kkp = -dir;  //比例制御の値を計算
-  kkd = ((kkp - kkp_old) * time) * kd;  //微分制御の値を計算
-  kkp_old = kkp;  //前Fの方向を更新
+  kkd = -((dir - dir_old) * time);  //微分制御の値を計算
+  
   kkp *= kp;
+  kkd *= kd;
+  if(150 < abs(kkp)){
+    kkp = (kkp < 0 ? -150 : 150);
+  }
   if(100 < abs(kkd)){
     kkd = (kkd < 0 ? -100 : 100);
   }
   
   val = kkp + kkd;  //最終的に返す値を計算
   ac_timer.reset();
+  dir_old = dir;
 
   return val;  //値返す
 }
@@ -22,17 +27,19 @@ double AC::getAC_val(){  //姿勢制御の値返す関数
 
 
 float AC::getCam_val(float cam){
-  this->getnowdir();
-  kkp = cam;  
-  kkd = ((kkp - kkp_old) * time) * kd;  //微分制御の値を計算
+  dir = getnowdir();
+
+  kkp = cam;
+  kkd = -((dir - dir_old) * time);  //微分制御の値を計算
+
+  kkp *= kp;
+  kkd *= kd;
   if(100 < abs(kkd)){
     kkd = (kkd < 0 ? -100 : 100);
   }
-  kkp_old = kkp;
-  kkp *= kp;
-  dir = getnowdir();
 
-  val = kkp + kkd;
+  dir_old = dir;
+  val = kkp - kkd;
   return val;  //値返す 
 }
 
@@ -52,8 +59,10 @@ float AC::getnowdir(){
 void AC::print(){  //現在の角度、正面方向、姿勢制御の最終的な値を表示
   Serial.print(" 角度 : ");
   Serial.print(dir);
-  Serial.print(" 正面方向 : ");
-  Serial.print(dir_target);
+  Serial.print(" d : ");
+  Serial.print(kkd);
+  Serial.print(" p : ");
+  Serial.print(kkp);
   Serial.print(" 最終的に出たやつ : ");
   Serial.print(val);
 }
